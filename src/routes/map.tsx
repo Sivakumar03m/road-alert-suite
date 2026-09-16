@@ -17,7 +17,7 @@ export const Route = createFileRoute("/map")({
       { property: "og:description", content: "Interactive corridor hazard map with risk and road-type filters." },
     ],
   }),
-  component: RiskMap;
+  component: RiskMap,
 });
 
 const LAT = [12.8, 13.12] as const;
