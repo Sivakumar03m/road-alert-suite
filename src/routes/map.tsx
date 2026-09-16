@@ -100,7 +100,7 @@ function RiskMap() {
               </defs>
               <rect width="100%" height="100%" fill="url(#grid)" />
               <path
-                d="M8% 70% Q 40% 40%, 92% 24%"
+                d="M40 420 Q 300 240, 620 120"
                 fill="none"
                 stroke="var(--muted-foreground)"
                 strokeWidth="2"
