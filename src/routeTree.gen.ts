@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as PredictRouteImport } from './routes/predict'
@@ -17,6 +18,11 @@ import { Route as PredictRouteImport } from './routes/predict'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyticsRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HistoryRoute = HistoryRouteImport.update({
@@ -37,12 +43,14 @@ const PredictRoute = PredictRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
   '/history': typeof HistoryRoute
   '/map': typeof MapRoute
   '/predict': typeof PredictRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
   '/history': typeof HistoryRoute
   '/map': typeof MapRoute
   '/predict': typeof PredictRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
   '/history': typeof HistoryRoute
   '/map': typeof MapRoute
   '/predict': typeof PredictRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/history' | '/map' | '/predict'
+  fullPaths: '/' | '/analytics' | '/history' | '/map' | '/predict'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/history' | '/map' | '/predict'
-  id: '__root__' | '/' | '/history' | '/map' | '/predict'
+  to: '/' | '/analytics' | '/history' | '/map' | '/predict'
+  id: '__root__' | '/' | '/analytics' | '/history' | '/map' | '/predict'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnalyticsRoute: typeof AnalyticsRoute
   HistoryRoute: typeof HistoryRoute
   MapRoute: typeof MapRoute
   PredictRoute: typeof PredictRoute
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/history': {
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnalyticsRoute: AnalyticsRoute,
   HistoryRoute: HistoryRoute,
   MapRoute: MapRoute,
   PredictRoute: PredictRoute,
