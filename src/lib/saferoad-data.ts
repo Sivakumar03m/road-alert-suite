@@ -249,19 +249,19 @@ const severities: Severity[] = ["Fatal", "Serious", "Minor"];
 const weathers: Weather[] = ["Clear", "Rain", "Fog", "Storm"];
 
 export const incidents: Incident[] = Array.from({ length: 64 }, (_, i) => {
-  const seg = segments[(i * 3) % segments.length];
+  const seg = segments[(i * 3) % segments.length]!;
   const day = ((i * 5) % 28) + 1;
   const month = (i % 6) + 1;
   const hour = (i * 7) % 24;
   return {
     id: `INC-${(4820 - i).toString()}`,
     datetime: `2026-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")} ${String(hour).padStart(2, "0")}:${String((i * 13) % 60).padStart(2, "0")}`,
-    segment: seg.name.split(" — ")[0],
-    cause: causes[i % causes.length],
+    segment: seg.name.split(" — ")[0]!,
+    cause: causes[i % causes.length]!,
     vehicles: (i % 4) + 1,
-    severity: severities[i % 3 === 0 ? (i % 9 === 0 ? 0 : 1) : 2],
-    weather: weathers[i % weathers.length],
-    status: statuses[i % statuses.length],
+    severity: severities[i % 3 === 0 ? (i % 9 === 0 ? 0 : 1) : 2]!,
+    weather: weathers[i % weathers.length]!,
+    status: statuses[i % statuses.length]!,
   };
 });
 
@@ -344,9 +344,9 @@ export function predictRisk(input: PredictionInput): {
   contributors: Contributor[];
   precautions: string[];
 } {
-  const seg = segments.find((s) => s.id === input.segmentId) ?? segments[0];
+  const seg = segments.find((s) => s.id === input.segmentId) ?? segments[0]!;
   const base = Math.round(seg.riskScore * 0.32);
-  const time = timeOptions.find((t) => t.value === input.timeOfDay) ?? timeOptions[0];
+  const time = timeOptions.find((t) => t.value === input.timeOfDay) ?? timeOptions[0]!;
   const traffic = Math.round((input.traffic / 100) * 18);
   const w = weatherWeight[input.weather];
   const s = surfaceWeight[input.surface];
@@ -356,8 +356,8 @@ export function predictRisk(input: PredictionInput): {
   const tier = tierFor(score);
 
   const contributors: Contributor[] = [
-    { label: `Segment history — ${seg.name.split(" — ")[0]}`, value: base },
-    { label: `Time & lighting — ${time.label.split(" (")[0]}`, value: time.weight },
+    { label: `Segment history — ${seg.name.split(" — ")[0]!}`, value: base },
+    { label: `Time & lighting — ${time.label.split(" (")[0]!}`, value: time.weight },
     { label: `Weather — ${input.weather}`, value: w },
     { label: `Road surface — ${input.surface}`, value: s },
     { label: "Traffic density", value: traffic },
@@ -377,7 +377,7 @@ export function predictRisk(input: PredictionInput): {
     precautions.push("Expect stop-and-go waves; watch two vehicles ahead to anticipate braking.");
   if (input.timeOfDay === "night-unlit")
     precautions.push("Reduce speed by 15–20 km/h at night; reaction distance grows with low visibility.");
-  precautions.push(`Historical hotspot note: ${seg.factors[0].toLowerCase()} is the leading factor here.`);
+  precautions.push(`Historical hotspot note: ${seg.factors[0]!.toLowerCase()} is the leading factor here.`);
   return { score, tier, contributors, precautions };
 }
 
